@@ -1,0 +1,3 @@
+include dependencies/*
+include dependencies/aws-nsm-interface/*
+include dependencies/aws-nsm-interface/dist/*

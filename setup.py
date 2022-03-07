@@ -13,11 +13,11 @@ LONG_DESCRIPTION = long_description
 
 
 
-path_to_dependencies = os.getcwd() + "/dependencies/aws-nsm-interface-main/dist"
+path_to_dependencies = os.getcwd() + "/dependencies/aws-nsm-interface/dist"
 
 # Setting up
 setup(
-    name="vfunctions-sdk",
+    name="vfunctions_sdk",
     version=VERSION,
     author="Verifiably",
     author_email="atul@verifiably.com",
@@ -34,6 +34,7 @@ setup(
         f"aws_nsm_interface @ file://localhost/{path_to_dependencies}/aws-nsm-interface-1.0.0.tar.gz"
     ],
     python_requires='>=3.8',
+    include_package_data = True,
     keywords=['python', 'nitro-enclave', 'security'],
     classifiers=[
         "Intended Audience :: Developers",
