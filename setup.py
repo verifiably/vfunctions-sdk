@@ -13,7 +13,7 @@ LONG_DESCRIPTION = long_description
 
 
 
-path_to_dependencies = os.getcwd() + "/dependencies/aws-nsm-interface/dist"
+path_to_dependencies = os.getcwd() + "/dependencies/aws-nsm-interface-main/dist"
 
 # Setting up
 setup(
