@@ -2,4 +2,4 @@
 
 Python package to use vFunctions.
 
-Visit the [examples](https://developer.verifiably.com/examples/) page.
+For an use case example visit the [Verifiably documentation](https://developer.verifiably.com/examples/) page.
