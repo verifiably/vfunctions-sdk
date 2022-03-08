@@ -11,10 +11,6 @@ VERSION = '0.0.1'
 DESCRIPTION = 'A package to manage development inside nitro enclaves.'
 LONG_DESCRIPTION = long_description
 
-
-
-path_to_dependencies = os.getcwd() + "/dependencies/aws-nsm-interface-main/dist"
-
 # Setting up
 setup(
     name="vfunctions_sdk",
@@ -31,10 +27,9 @@ setup(
         'pycryptodome==3.9.9',
         'boto3',
         'websocket-client',
-        f"aws_nsm_interface @ file://localhost/{path_to_dependencies}/aws-nsm-interface-1.0.0.tar.gz"
+        'aws_nsm_interface_verifiably'
     ],
     python_requires='>=3.8',
-    include_package_data = True,
     keywords=['python', 'nitro-enclave', 'security'],
     classifiers=[
         "Intended Audience :: Developers",

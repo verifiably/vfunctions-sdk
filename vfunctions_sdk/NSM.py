@@ -1,4 +1,4 @@
-import aws_nsm_interface
+import aws_nsm_interface_verifiably as aws_nsm_interface
 import Crypto
 from Crypto.PublicKey import RSA
 from Crypto.Cipher import PKCS1_OAEP
