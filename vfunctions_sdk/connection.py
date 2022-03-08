@@ -3,8 +3,6 @@ import json
 from websocket import create_connection
 import boto3
 
-
-
 class Vsock_connection():
 
     def __init__(self):

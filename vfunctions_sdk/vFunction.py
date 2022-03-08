@@ -2,8 +2,8 @@
 
 import base64
 import json
-from verifiably import connection
-from verifiably import NSM
+from vfunctions_sdk import connection
+from vfunctions_sdk import NSM
 
 class VFunction():
     def __init__(self):

@@ -7,7 +7,7 @@ import os
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
-VERSION = '0.0.1'
+VERSION = '0.0.2'
 DESCRIPTION = 'A package to manage development inside nitro enclaves.'
 LONG_DESCRIPTION = long_description
 
@@ -30,6 +30,7 @@ setup(
         'aws_nsm_interface_verifiably'
     ],
     python_requires='>=3.8',
+    url='https://github.com/verifiably/vfunctions-sdk',
     keywords=['python', 'nitro-enclave', 'security'],
     classifiers=[
         "Intended Audience :: Developers",
