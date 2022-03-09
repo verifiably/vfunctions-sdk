@@ -7,7 +7,7 @@ import os
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
-VERSION = '0.0.4'
+VERSION = '0.0.5'
 DESCRIPTION = 'A package to manage development inside nitro enclaves.'
 LONG_DESCRIPTION = long_description
 
@@ -16,7 +16,7 @@ setup(
     name="vfunctions_sdk",
     version=VERSION,
     author="Verifiably",
-    author_email="atul@verifiably.com",
+    author_email="contact@verifiably.com",
     description=DESCRIPTION,
     long_description_content_type="text/markdown",
     long_description=long_description,
