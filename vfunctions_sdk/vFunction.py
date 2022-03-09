@@ -18,8 +18,9 @@ class VFunction():
         print(request_data)
         self.params = request_data["params"]
 
-        self.aws_credentials = aws_credentials
         aws_credentials = request_data["awsCredentials"]
+
+        self.aws_credentials = aws_credentials
 
         self.region = aws_credentials["Region"]
         self.aws_access_key_id = aws_credentials["AccessKeyId"]
