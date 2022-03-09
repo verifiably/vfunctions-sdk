@@ -4,6 +4,7 @@ import base64
 import json
 from vfunctions_sdk import connection
 from vfunctions_sdk import NSM
+from vfunctions_sdk import publish
 
 class VFunction():
     def __init__(self):
@@ -17,6 +18,7 @@ class VFunction():
         print(request_data)
         self.params = request_data["params"]
 
+        self.aws_credentials = aws_credentials
         aws_credentials = request_data["awsCredentials"]
 
         self.region = aws_credentials["Region"]
@@ -43,14 +45,16 @@ class VFunction():
         result_attestation_doc_b64 = base64.b64encode(attestation_doc_result).decode()
         return result_attestation_doc_b64
 
+
     def decrypt(self, cipherdata):
         cipherdata = base64.b64decode(cipherdata)
         return json.loads(self.nsm.decrypt(cipherdata))
 
 
-    def email_results(self, att_doc_b64):
+    def email_results(self, recipient, att_doc_b64):
         encoded_att_doc = str.encode(att_doc_b64)
-        self.client_socket.send(encoded_att_doc)
+        publish.send_email(recipient, encoded_att_doc, self.aws_credentials)
+
 
     def close(self):
         self.client_socket.close_connection()
