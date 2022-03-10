@@ -22,11 +22,6 @@ class VFunction():
 
         self.aws_credentials = aws_credentials
 
-        self.region = aws_credentials["Region"]
-        self.aws_access_key_id = aws_credentials["AccessKeyId"]
-        self.aws_secret_access_key = aws_credentials["SecretAccessKey"]
-        self.aws_session_token = aws_credentials["SessionToken"]
-
 
     def get_attestation_doc_for_credentials(self):
 

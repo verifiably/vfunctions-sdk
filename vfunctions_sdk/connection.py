@@ -60,24 +60,24 @@ class WsockCredentialProvider:
     def __init__(self, connection_id, vFunc):
         self.connection_id = connection_id
 
-        self.region = vFunc.region
-        self.aws_access_key_id = vFunc.aws_access_key_id
-        self.aws_secret_access_key = vFunc.aws_secret_access_key
-        self.aws_session_token = vFunc.aws_session_token
+        self.aws_credentials = vFunc.aws_credentials
 
 
     def request_credentials(self, vFunctionConnectionId, att_doc):
 
-        client = boto3.client('apigatewaymanagementapi',
-                endpoint_url="https://wsock.us-east-2.verifiably.com",
-                region_name = self.region,
-                aws_access_key_id = self.aws_access_key_id,
-                aws_secret_access_key = self.aws_secret_access_key,
-                aws_session_token = self.aws_session_token)
+        client = boto3.client(
+            'apigatewaymanagementapi',
+            endpoint_url="https://wsock.us-east-2.verifiably.com",
+            region_name = self.aws_credentials["Region"],
+            aws_access_key_id = self.aws_credentials["AccessKeyId"],
+            aws_secret_access_key = self.aws_credentials["SecretAccessKey"],
+            aws_session_token = self.aws_credentials["SessionToken"])
+
 
         request = {
             "vFunctionConnectionId": vFunctionConnectionId,
-            "att_doc": att_doc
+            "att_doc": att_doc,
+            "aws_credentials": self.aws_credentials
         }
 
         try:
@@ -93,4 +93,3 @@ class WsockCredentialProvider:
         ws = create_connection("wss://wsock.us-east-2.verifiably.com")
         self.request_credentials(get_connection_id(ws), att_doc)
         return await_credentials(ws)
-
