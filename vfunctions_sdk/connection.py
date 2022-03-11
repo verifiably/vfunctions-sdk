@@ -37,7 +37,7 @@ class Vsock_connection():
 
         return request
 
-    
+
     def send(self, data):
         self.client_connection.sendall(data)
 
@@ -50,20 +50,22 @@ def get_connection_id(ws):
         ws.send("hello")
         return json.loads(ws.recv())['connectionId']
 
-def await_credentials(ws):
+def await_secrets(ws):
     value = ws.recv()
     return value
 
 
-class WsockCredentialProvider:
+class WsockSecretsProvider:
 
-    def __init__(self, connection_id, vFunc):
-        self.connection_id = connection_id
+    def __init__(self, function_params):
+        self.connection_id = function_params.params["wSockConnectionId"]
 
-        self.aws_credentials = vFunc.aws_credentials
+        self.aws_credentials = function_params.aws_credentials
+
+        self.function_params = function_params
 
 
-    def request_credentials(self, vFunctionConnectionId, att_doc):
+    def request_secrets(self, vFunctionConnectionId, att_doc):
 
         client = boto3.client(
             'apigatewaymanagementapi',
@@ -89,7 +91,15 @@ class WsockCredentialProvider:
             print("Caught exception:")
             print(e)
 
-    def get_credentials(self, att_doc):
+    def get_secrets(self):
+        # Get att doc
+        attestation_doc = self.function_params.get_attestation_doc_for_secrets()
+
+        # Use att doc to ask for secrets trough wsock
         ws = create_connection("wss://wsock.us-east-2.verifiably.com")
-        self.request_credentials(get_connection_id(ws), att_doc)
-        return await_credentials(ws)
+        self.request_secrets(get_connection_id(ws), attestation_doc)
+        encrypted_secrets_bundle =  await_secrets(ws)
+
+        # Decrypt and return secrets
+        secrets_bundle = self.function_params.decrypt(encrypted_secrets_bundle)
+        return secrets_bundle

@@ -6,16 +6,15 @@ from vfunctions_sdk import connection
 from vfunctions_sdk import NSM
 from vfunctions_sdk import publish
 
-class VFunction():
+class FunctionParams():
     def __init__(self):
         self.nsm = NSM.NSM()
 
         self.client_socket = connection.Vsock_connection()
+
         # Get message from the host
-        print("Getting data from host")
         request_data = self.client_socket.get_message()
 
-        print(request_data)
         self.params = request_data["params"]
 
         aws_credentials = request_data["awsCredentials"]
@@ -23,7 +22,7 @@ class VFunction():
         self.aws_credentials = aws_credentials
 
 
-    def get_attestation_doc_for_credentials(self):
+    def get_attestation_doc_for_secrets(self):
 
         attestation_doc = self.nsm.get_attestation_doc(
             public_key=self.nsm._public_key)
@@ -47,7 +46,8 @@ class VFunction():
         return json.loads(self.nsm.decrypt(cipherdata))
 
 
-    def email_results(self, recipient, att_doc_b64):
+    def email_results(self, recipient, data_to_sign):
+        att_doc_b64 = self.sign_results(data_to_sign)
         encoded_att_doc = str.encode(att_doc_b64)
         publish.send_email(recipient, encoded_att_doc, self.aws_credentials)
 
