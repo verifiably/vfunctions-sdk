@@ -26,53 +26,67 @@ BODY_HTML = """\
 </html>
 """
 
-def send_email(recipient, att_doc, aws_credentials):
-    # Create a new SES resource and specify a region.
-    client = boto3.client('ses',
-        region_name = aws_credentials["Region"],
-        aws_access_key_id = aws_credentials["AccessKeyId"],
-        aws_secret_access_key = aws_credentials["SecretAccessKey"],
-        aws_session_token = aws_credentials["SessionToken"])
+class Publisher():
+
+    def __init__(self, aws_credentials):
+        self.aws_credentials = aws_credentials
 
 
-    # Create a multipart/mixed parent container.
-    msg = MIMEMultipart('mixed')
-    # Add subject, from and to lines.
-    msg['Subject'] = SUBJECT
-    msg['From'] = SENDER
-    msg['To'] = recipient
 
-    # Create a multipart/alternative child container.
-    msg_body = MIMEMultipart('alternative')
-    textpart = MIMEText(BODY_TEXT.encode(CHARSET), 'plain', CHARSET)
-    htmlpart = MIMEText(BODY_HTML.encode(CHARSET), 'html', CHARSET)
+    def build_email(self, recipient, att_doc):
 
-    # Add the text and HTML parts to the child container.
-    msg_body.attach(textpart)
-    msg_body.attach(htmlpart)
+        # Create a multipart/mixed parent container.
+        msg = MIMEMultipart('mixed')
+        # Add subject, from and to lines.
+        msg['Subject'] = SUBJECT
+        msg['From'] = SENDER
+        msg['To'] = recipient
 
-    # Define the attachment part and encode it using MIMEApplication.
-    att = MIMEApplication(att_doc)
-    att.add_header('Content-Disposition','attachment',filename=os.path.basename("result_att_doc.txt"))
-    msg.attach(msg_body)
+        # Create a multipart/alternative child container.
+        msg_body = MIMEMultipart('alternative')
+        textpart = MIMEText(BODY_TEXT.encode(CHARSET), 'plain', CHARSET)
+        htmlpart = MIMEText(BODY_HTML.encode(CHARSET), 'html', CHARSET)
 
-    # Add the attachment to the parent container.
-    msg.attach(att)
+        # Add the text and HTML parts to the child container.
+        msg_body.attach(textpart)
+        msg_body.attach(htmlpart)
 
-    try:
-        #Provide the contents of the email.
-        response = client.send_raw_email(
-            Source=SENDER,
-            Destinations=[
-                recipient
-            ],
-            RawMessage={
-                'Data':msg.as_string(),
-            },
-        )
-    # Display an error if something goes wrong.
-    except ClientError as e:
-        print(e.response['Error']['Message'])
-    else:
-        print("Email sent! Message ID:"),
-        print(response['MessageId'])
+        # Define the attachment part and encode it using MIMEApplication.
+        att = MIMEApplication(att_doc)
+        att.add_header('Content-Disposition','attachment',
+                       filename=os.path.basename("result_att_doc.txt"))
+        msg.attach(msg_body)
+
+        # Add the attachment to the parent container.
+        msg.attach(att)
+
+        return msg
+
+
+    def send_email(self, recipient, att_doc):
+        # Create a new SES resource and specify a region.
+        client = boto3.client(
+            'ses', region_name = self.aws_credentials["Region"],
+            aws_access_key_id = self.aws_credentials["AccessKeyId"],
+            aws_secret_access_key = self.aws_credentials["SecretAccessKey"],
+            aws_session_token = self.aws_credentials["SessionToken"])
+
+        msg = self.build_email(recipient, att_doc)
+
+        try:
+            #Provide the contents of the email.
+            response = client.send_raw_email(
+                Source=SENDER,
+                Destinations=[
+                    recipient
+                ],
+                RawMessage={
+                    'Data':msg.as_string(),
+                },
+            )
+            # Display an error if something goes wrong.
+        except ClientError as e:
+            print(e.response['Error']['Message'])
+        else:
+            print("Email sent! Message ID:"),
+            print(response['MessageId'])
