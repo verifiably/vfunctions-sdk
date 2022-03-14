@@ -49,7 +49,9 @@ class FunctionParams():
     def email_results(self, recipient, data_to_sign):
         att_doc_b64 = self.sign_results(data_to_sign)
         encoded_att_doc = str.encode(att_doc_b64)
-        publish.send_email(recipient, encoded_att_doc, self.aws_credentials)
+
+        publisher = publish.Publisher(self.aws_credentials)
+        publisher.send_email(recipient, encoded_att_doc)
 
 
     def close(self):
