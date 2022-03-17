@@ -7,7 +7,7 @@ import os
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
-VERSION = '0.0.6'
+VERSION = '0.0.7'
 DESCRIPTION = 'A package to manage development inside nitro enclaves.'
 LONG_DESCRIPTION = long_description
 
