@@ -14,6 +14,7 @@ pip install vfunctions_sdk
 
 ``` python
 import json
+import requests
 
 from vfunctions_sdk import vFunction
 from vfunctions_sdk import connection
