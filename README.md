@@ -55,16 +55,20 @@ def main():
     account_id = secrets_bundle["mercuryBank"]["accountId"]
     mercury_token = secrets_bundle["mercuryBank"]["mercuryToken"]
 
+    recipient_email = secrets_bundle["email"]
+    balance_threshold = secrets_bundle["threshold_balance"]
+
     # Get the information from the mercury account
-    result_value = mercury_balance_check(account_id, mercury_token, function_params.params)
+    result_value = mercury_balance_check(account_id, mercury_token, balance_threshold)
 
     result_dict = {
             "result": result_value,
-            "balance": function_params.params["balance_threshold"]
+            "balance": balance_threshold
     }
-    
+
     # Send the email with the results
-    function_params.email_results(function_params.params['email'], result_dict)
+    function_params.email_results(recipient_email, result_dict)
+
 
 if __name__ == '__main__':
     main()
