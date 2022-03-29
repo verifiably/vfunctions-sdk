@@ -2,6 +2,7 @@ import socket
 import json
 from websocket import create_connection
 import boto3
+import requests
 
 class Vsock_connection():
 
@@ -102,4 +103,26 @@ class WsockSecretsProvider:
 
         # Decrypt and return secrets
         secrets_bundle = self.function_params.decrypt(encrypted_secrets_bundle)
+        return secrets_bundle
+
+class HttpSecretsProvider:
+
+    def __init__(self, function_params):
+        self.http_endpoint = function_params.params["httpEndpoint"]
+
+        self.function_params = function_params
+
+
+    def get_secrets(self):
+
+        att_doc = self.function_params.get_attestation_doc_for_secrets()
+
+        data = {"att_doc": att_doc}
+
+        response = requests.request("POST", self.http_endpoint,
+                data=json.dumps(data))
+
+        encrypted_secrets_bundle = json.loads(response.text)['secrets_bundle']
+        secrets_bundle = self.function_params.decrypt(encrypted_secrets_bundle)
+
         return secrets_bundle
