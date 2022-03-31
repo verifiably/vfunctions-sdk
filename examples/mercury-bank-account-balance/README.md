@@ -15,6 +15,6 @@ A bash script that will be used to start the vFunction.
 # Zip file
 The mercuryBankExample.zip contains the previously explained files and its sha256 is:
 ```bash
-aec2d3ff6b3cfc3f9f71d88c347b3da65fc480883a0a4a24eac3f738da4d8208
+2cba0efa3c42c7411f982d0315aa52c1b5f667ea49c0a1ca473eca483df8bf86
 ```
 
