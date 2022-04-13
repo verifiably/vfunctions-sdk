@@ -53,6 +53,13 @@ class FunctionParams():
         publisher = publish.Publisher(self.aws_credentials)
         publisher.send_email(recipient, encoded_att_doc)
 
+    def publish_results_to_s3(self, bucket, key, data_to_sign):
+        att_doc_b64 = self.sign_results(data_to_sign)
+        encoded_att_doc = str.encode(att_doc_b64)
+
+        publisher = publish.Publisher(self.aws_credentials)
+        publisher.send_email(bucket, key, encoded_att_doc)
+
 
     def close(self):
         self.client_socket.close_connection()

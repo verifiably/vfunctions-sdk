@@ -90,3 +90,15 @@ class Publisher():
         else:
             print("Email sent! Message ID:"),
             print(response['MessageId'])
+
+
+    def put_object(self, bucket, key, att_doc):
+        client = boto3.client(
+            'ses', region_name = self.aws_credentials["Region"],
+            aws_access_key_id = self.aws_credentials["AccessKeyId"],
+            aws_secret_access_key = self.aws_credentials["SecretAccessKey"],
+            aws_session_token = self.aws_credentials["SessionToken"])
+
+        response = client.put_object(
+            Body=att_doc, Bucket=bucket,
+            Key=key)
