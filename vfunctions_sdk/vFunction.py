@@ -58,7 +58,7 @@ class FunctionParams():
         encoded_att_doc = str.encode(att_doc_b64)
 
         publisher = publish.Publisher(self.aws_credentials)
-        publisher.send_email(bucket, key, encoded_att_doc)
+        publisher.put_object(bucket, key, encoded_att_doc)
 
 
     def close(self):
